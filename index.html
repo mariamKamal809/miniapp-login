@@ -3,38 +3,49 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-        <script src="https://cdn.tailwindcss.com"></script>
+        <title>Demo MiniApp</title>
         <script src="https://cdn.marmot-cloud.com/npm/hylid-bridge/2.10.0/index.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     </head>
-    <body class="min-h-screen flex items-center justify-center">
-        <div class="w-full max-w-[360px] px-5 flex flex-col gap-4">
-            <!-- Login Button -->
+
+    <body>
+        <div
+            class="h-16 w-full bg-stone-700 flex items-center justify-start px-4 fixed top-0 left-0 z-10"
+        >
+            <h1 class="text-2xl font-bold text-white">Demo MiniApp</h1>
+        </div>
+
+        <div
+            class="w-full h-screen flex flex-col items-center gap-4 justify-start p-4 mt-16"
+        >
             <button
-                class="w-full py-4 rounded-xl text-base font-bold bg-blue-500 text-white active:scale-95 transition-transform"
+                class="bg-blue-500 text-white px-4 py-2 rounded-md"
                 onclick="authenticate()"
             >
                 Login
             </button>
-
-            <!-- Copy Auth Code Button -->
             <button
-                class="w-full py-4 rounded-xl text-base font-bold bg-green-500 text-white active:scale-95 transition-transform"
+                class="bg-blue-500 text-white px-4 py-2 rounded-md"
                 onclick="copyAuthCode()"
             >
                 Copy Auth Code
             </button>
+            <p class="text-sm text-gray-500">
+                Auth Code: <span id="authCode"></span>
+            </p>
         </div>
 
         <script>
-            var authcode = "";
+            var authCode = "";
+
             function authenticate() {
                 my.getAuthCode({
                     scopes: ["auth_base", "USER_ID"],
                     success: (res) => {
-                        authcode = res.authCode;
-                        document.getElementById("authcode").textContent =
-                            authcode;
+                        authCode = res.authCode;
+                        document.getElementById("authCode").textContent =
+                            authCode;
+
                         fetch(
                             "https://its.mouamle.space/api/auth-with-superQi",
                             {
@@ -42,13 +53,15 @@
                                 headers: {
                                     "Content-Type": "application/json",
                                 },
-                                body: JSON.stringify({ token: authcode }),
+                                body: JSON.stringify({
+                                    token: authCode,
+                                }),
                             }
                         )
                             .then((res) => res.json())
                             .then((data) => {
                                 my.alert({
-                                    content: "Login successful! Welcome ",
+                                    content: "Login successful",
                                 });
                             })
                             .catch((err) => {
@@ -58,18 +71,19 @@
                                 } else {
                                     errorDetails = String(err);
                                 }
+                                my.alert({
+                                    content: "Error: " + errorDetails,
+                                });
                             });
-                        my.alert({
-                            content: res.authCode,
-                        });
                     },
                     fail: (res) => {
                         console.log(res.authErrorScopes);
                     },
                 });
             }
+
             function copyAuthCode() {
-                navigator.clipboard.writeText(authcode);
+                navigator.clipboard.writeText(authCode);
             }
         </script>
     </body>
