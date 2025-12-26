@@ -51,6 +51,7 @@
 
         <script>
             var token = "";
+
             function pay() {
                 fetch("https://its.mouamle.space/api/payment", {
                     method: "POST",
@@ -65,7 +66,7 @@
                             paymentUrl: data.url,
                             success: (res) => {
                                 my.alert({
-                                    content: "Payment successfullll",
+                                    content: "Payment successful",
                                 });
                             },
                         });
