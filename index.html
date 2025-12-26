@@ -54,9 +54,7 @@
                         )
                             .then((res) => res.json())
                             .then((data) => {
-                                my.alert({
-                                    content: "Login successful",
-                                });
+                                window.location.href = "payment.html";
                             })
                             .catch((err) => {
                                 let errorDetails = "";
