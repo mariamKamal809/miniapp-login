@@ -24,12 +24,6 @@
             >
                 Login
             </button>
-            <button
-                class="bg-blue-500 text-white px-4 py-2 rounded-md"
-                onclick="pay()"
-            >
-                Pay
-            </button>
 
             <p class="text-sm text-gray-500">
                 Auth Code: <span id="authCode"></span>
@@ -66,6 +60,7 @@
                                 my.alert({
                                     content: "Login successful",
                                 });
+                                window.location.href = "payment.html";
                             })
                             .catch((err) => {
                                 let errorDetails = "";
@@ -83,32 +78,6 @@
                         console.log(res.authErrorScopes);
                     },
                 });
-            }
-
-            function pay() {
-                fetch("https://its.mouamle.space/api/payment", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: token,
-                    },
-                })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        my.tradePay({
-                            paymentUrl: data.url,
-                            success: (res) => {
-                                my.alert({
-                                    content: "Payment successful",
-                                });
-                            },
-                        });
-                    })
-                    .catch((err) => {
-                        my.alert({
-                            content: "Payment failed",
-                        });
-                    });
             }
 
             function copyAuthCode() {
