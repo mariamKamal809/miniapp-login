@@ -9,34 +9,29 @@
     </head>
 
     <body>
-        <div>
-            <button
-                class="bg-blue-500 text-white px-4 py-2 rounded-md"
-                onclick="authenticate()"
-            >
-                Login
-            </button>
-
-            <p class="text-sm text-gray-500">
-                Auth Code: <span id="authCode"></span>
-            </p>
-        </div>
-        <!-- ///////////////////////////////////// -->
         <div
             class="w-full h-screen flex flex-col items-center gap-4 justify-start p-4 mt-16"
         >
             <button
-                class="w-50 py-4 rounded-xl text-base font-bold bg-blue-500 text-white active:scale-95 transition-transform"
+                class="bg-green-500 text-white px-4 py-2 rounded-md"
                 onclick="authenticate()"
             >
                 Login
             </button>
             <button
-                class="w-50 py-4 rounded-xl text-base font-bold bg-green-500 text-white active:scale-95 transition-transform"
-                onclick="copyAuthCode()"
+                class="bg-blue-500 text-white px-4 py-2 rounded-md"
+                onclick="pay()"
             >
-                Copy Auth Code
+                Pay
             </button>
+
+            <button
+                class="bg-orange-500 text-white px-4 py-2 rounded-md"
+                onclick="scan()"
+            >
+                scan QR code
+            </button>
+
             <p class="text-sm text-gray-500">
                 Auth Code: <span id="authCode"></span>
             </p>
@@ -72,7 +67,6 @@
                                 my.alert({
                                     content: "Login successful",
                                 });
-                                window.location.href = "paymentPage.html";
                             })
                             .catch((err) => {
                                 let errorDetails = "";
@@ -92,9 +86,46 @@
                 });
             }
 
+            function pay() {
+                fetch("https://its.mouamle.space/api/payment", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: token,
+                    },
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        my.tradePay({
+                            paymentUrl: data.url,
+                            success: (res) => {
+                                my.alert({
+                                    content: "Payment successful",
+                                });
+                            },
+                        });
+                    })
+                    .catch((err) => {
+                        my.alert({
+                            content: "Payment failed",
+                        });
+                    });
+            }
+
             function copyAuthCode() {
                 navigator.clipboard.writeText(authCode);
             }
+
+            Page({
+                scan() {
+                    my.scan({
+                        type: "qr",
+                        success: (res) => {
+                            my.alert({ title: res.code });
+                        },
+                    });
+                },
+            });
         </script>
     </body>
 </html>
