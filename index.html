@@ -27,7 +27,7 @@
 
             <button
                 class="bg-orange-500 text-white px-4 py-2 rounded-md"
-                onclick="scan()"
+                onclick="miniScan()"
             >
                 scan QR code
             </button>
@@ -116,16 +116,18 @@
                 navigator.clipboard.writeText(authCode);
             }
 
-            Page({
-                scan() {
-                    my.scan({
-                        type: "qr",
-                        success: (res) => {
-                            my.alert({ title: res.code });
-                        },
-                    });
-                },
-            });
+            function miniScan() {
+                Page({
+                    scan() {
+                        my.scan({
+                            type: "qr",
+                            success: (res) => {
+                                my.alert({ title: res.code });
+                            },
+                        });
+                    },
+                });
+            }
         </script>
     </body>
 </html>
