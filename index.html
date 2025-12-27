@@ -117,14 +117,10 @@
             }
 
             function miniScan() {
-                Page({
-                    scan() {
-                        my.scan({
-                            type: "qr",
-                            success: (res) => {
-                                my.alert({ title: res.code });
-                            },
-                        });
+                my.scan({
+                    type: "qr",
+                    success: (res) => {
+                        my.alert({ title: res.code });
                     },
                 });
             }
